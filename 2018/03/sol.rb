@@ -38,7 +38,7 @@ class Rect
   end
   
   def intersects?(rect)
-    left < rect.right and right > rect.left and top < rect.bottom and bottom > rect.top
+    left <= rect.right and right >= rect.left and top <= rect.bottom and bottom >= rect.top
   end
   
   def intersection(rect)
@@ -67,14 +67,20 @@ end
 class Claim
   attr_accessor :num
   attr_accessor :rect
+  attr_accessor :overlaps
   
   def initialize(num, rect)
     @num, @rect = num.to_i, rect
+    @overlaps = false
   end
   
   def self.parse(string)
     m = string.match(/#(?<num>\d+)\s+@\s+(?<x>\d+),(?<y>\d+)\:\s+(?<w>\d+)x(?<h>\d+)/)
     Claim.new(m[:num], Rect.new(m[:x], m[:y], m[:w], m[:h]))
+  end
+  
+  def to_s
+    inspect
   end
   
   def inspect
@@ -103,18 +109,17 @@ claims = File.readlines(filename).map{|line| Claim.parse(line)}
 # a.select!{|x| x > 1 }
 # a.count # => 118840
 
-a = Array.new(1000 * 1000, [])
-a.count # => 1000000
-a[1000] # => []
+a = Array.new(1000, Array.new(1000, 0))
 
-claims.each do |c|
-  for x in c.rect.left..c.rect.right
-    for y in c.rect.top..c.rect.bottom
-      i = y * 1000 + x
-      a[i] << c
+for i in 0..claims.count - 2
+  for j in i + 1..claims.count - 1
+    if claims[i].rect.intersects?(claims[j].rect)
+      claims[i].overlaps = true
+      claims[j].overlaps = true
     end
   end
+  
+  puts "no overlap for #{claims[i]}" if !claims[i].overlaps
 end
 
-a.count # => 1000000
-a[1000] # => 
+puts claims.select{|c| !c.overlaps }
