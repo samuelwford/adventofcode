@@ -1,17 +1,11 @@
-# file = "input.txt"
-file = "test1.txt"
+file = "input.txt"
+# file = "test1.txt"
 # file = "test2.txt"
 
 dir = __dir__.nil? ? "" : __dir__ + "/"
 filename = dir + file
 
-filename # => "test1.txt"
-
-claims = File.readlines(filename)
-claims # => ["#1 @ 1,3: 4x4\n", "#2 @ 3,1: 4x4\n", "#3 @ 5,5: 2x2"]
-
-parsed = claims.map{|c|c.match(/#(?<num>\d+)\s+@\s+(?<x>\d+),(?<y>\d+)\:\s+(?<w>\d+)x(?<h>\d+)/)}
-parsed # => [#<MatchData "#1 @ 1,3: 4x4" num:"1" x:"1" y:"3" w:"4" h:"4">, #<MatchData "#2 @ 3,1: 4x4" num:"2" x:"3" y:"1" w:"4" h:"4">, #<MatchData "#3 @ 5,5: 2x2" num:"3" x:"5" y:"5" w:"2" h:"2">]
+filename # => "input.txt"
 
 class Rect
   attr_accessor :x
@@ -39,11 +33,17 @@ class Rect
     @y + @h - 1
   end
   
+  def area
+    @w * @h
+  end
+  
   def intersects?(rect)
     left < rect.right and right > rect.left and top < rect.bottom and bottom > rect.top
   end
   
   def intersection(rect)
+    return nil unless intersects?(rect)
+    
     l = [left, rect.left].max
     r = [right, rect.right].min
     t = [top, rect.top].max
@@ -69,7 +69,12 @@ class Claim
   attr_accessor :rect
   
   def initialize(num, rect)
-    @num, @rect = num, rect
+    @num, @rect = num.to_i, rect
+  end
+  
+  def self.parse(string)
+    m = string.match(/#(?<num>\d+)\s+@\s+(?<x>\d+),(?<y>\d+)\:\s+(?<w>\d+)x(?<h>\d+)/)
+    Claim.new(m[:num], Rect.new(m[:x], m[:y], m[:w], m[:h]))
   end
   
   def inspect
@@ -77,17 +82,39 @@ class Claim
   end
 end
 
-objects = parsed.map{|m| Claim.new(m[:num], Rect.new(m[:x], m[:y], m[:w], m[:h]))}
-objects # => [<#1: (1,3)-(4,6)>, <#2: (3,1)-(6,4)>, <#3: (5,5)-(6,6)>]
+claims = File.readlines(filename).map{|line| Claim.parse(line)}
 
-a, b, c = objects[0], objects[1], objects[2]
+# r = claims.max_by{|c| c.rect.right }.rect.right
+# r # => 999
+# b = claims.max_by{|c| c.rect.bottom }.rect.bottom
+# b # => 998
+#
+# a = Array.new(1000 * 1000, 0)
+# a.count # => 1000000
+#
+# claims.each do |c|
+#   for x in c.rect.left..c.rect.right
+#     for y in c.rect.top..c.rect.bottom
+#       a[y * 1000 + x] += 1
+#     end
+#   end
+# end
+#
+# a.select!{|x| x > 1 }
+# a.count # => 118840
 
-a # => <#1: (1,3)-(4,6)>
-b # => <#2: (3,1)-(6,4)>
-c # => <#3: (5,5)-(6,6)>
+a = Array.new(1000 * 1000, [])
+a.count # => 1000000
+a[1000] # => []
 
-a.rect.intersects?(b.rect) # => true
-b.rect.intersects?(a.rect) # => true
-a.rect.intersects?(c.rect) # => false
+claims.each do |c|
+  for x in c.rect.left..c.rect.right
+    for y in c.rect.top..c.rect.bottom
+      i = y * 1000 + x
+      a[i] << c
+    end
+  end
+end
 
-a.rect.intersection(b.rect) # => (3,3)-(4,4)
+a.count # => 1000000
+a[1000] # => 
