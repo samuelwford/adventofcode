@@ -21,58 +21,29 @@ def execute(program, input)
       params[0] = mode[0] == "0" ? program[program[ic + 1]] : program[ic + 1]
       params[1] = mode[1] == "0" ? program[program[ic + 2]] : program[ic + 2]
       params[2] = program[ic + 3]
-      result = params[0] + params[1]
-      
-      desc[0] = "value #{params[0]}" + (mode[0] == "0" ? " from %03d" % program[ic + 1] : "")
-      desc[1] = "value #{params[1]}" + (mode[1] == "0" ? " from %03d" % program[ic + 2] : "")
-      
-      #puts "%03d: %s,%d,%d,%d - add %s + %s, store %05d in %03d" % [ic, field, program[ic + 1], program[ic + 2], program[ic + 3], desc[0], desc[1], result, params[2]]
-      
-      program[params[2]] = result
+      program[params[2]] = params[0] + params[1]
       ic += 4
       
     when "02"
       params[0] = mode[0] == "0" ? program[program[ic + 1]] : program[ic + 1]
       params[1] = mode[1] == "0" ? program[program[ic + 2]] : program[ic + 2]
       params[2] = program[ic + 3]
-      result = params[0] * params[1]
-      
-      desc[0] = "value #{params[0]}" + (mode[0] == "0" ? " from %03d" % program[ic + 1] : "")
-      desc[1] = "value #{params[1]}" + (mode[1] == "0" ? " from %03d" % program[ic + 2] : "")
-
-      #puts "%03d: %s,%d,%d,%d - multiply %s * %s, store %05d in %03d" % [ic, field, program[ic + 1], program[ic + 2], program[ic + 3], desc[0], desc[1], result, params[2]]
-      
-      program[params[2]] = result
+      program[params[2]] = params[0] * params[1]
       ic += 4
       
     when "03"
       params[0] = program[ic + 1]
-      acc = input.shift
-      
-      #puts "%03d: %s,%d - store input %d in %03d" % [ic, field, program[ic + 1], acc, params[0]]
-      
-      program[params[0]] = acc
+      program[params[0]] = input.shift
       ic += 2
       
     when "04"
       params[0] = mode[0] == "0" ? program[program[ic + 1]] : program[ic + 1]
       acc = params[0]
-
-      desc[0] = "value #{params[0]}" + (mode[0] == "0" ? " from %03d" % program[ic + 1] : "")
-
-      # puts "%03d: %s,%d - output %d from %s" % [ic, field, program[ic + 1], acc, desc[0]]
-
       ic += 2
       
     when "05"
       params[0] = mode[0] == "0" ? program[program[ic + 1]] : program[ic + 1]
       params[1] = mode[1] == "0" ? program[program[ic + 2]] : program[ic + 2]
-
-      desc[0] = "value #{params[0]}" + (mode[0] == "0" ? " from %03d" % program[ic + 1] : "")
-      desc[1] = "value #{params[1]}" + (mode[1] == "0" ? " from %03d" % program[ic + 2] : "")
-
-      # puts "%03d: %s,%d,%d - jump if %s true to %s" % [ic, field, program[ic + 1], program[ic + 2], desc[0], desc[1]]
-      
       if params[0] != 0 
         ic = params[1]
       else
@@ -82,12 +53,6 @@ def execute(program, input)
     when "06"
       params[0] = mode[0] == "0" ? program[program[ic + 1]] : program[ic + 1]
       params[1] = mode[1] == "0" ? program[program[ic + 2]] : program[ic + 2]
-
-      desc[0] = "value #{params[0]}" + (mode[0] == "0" ? " from %03d" % program[ic + 1] : "")
-      desc[1] = "value #{params[1]}" + (mode[1] == "0" ? " from %03d" % program[ic + 2] : "")
-
-      # puts "%03d: %s,%d,%d - jump if %s false to %s" % [ic, field, program[ic + 1], program[ic + 2], desc[0], desc[1]]
-      
       if params[0] == 0 
         ic = params[1]
       else
@@ -98,28 +63,14 @@ def execute(program, input)
       params[0] = mode[0] == "0" ? program[program[ic + 1]] : program[ic + 1]
       params[1] = mode[1] == "0" ? program[program[ic + 2]] : program[ic + 2]
       params[2] = program[ic + 3]
-      result = params[0] < params[1] ? 1 : 0
-      
-      desc[0] = "value #{params[0]}" + (mode[0] == "0" ? " from %03d" % program[ic + 1] : "")
-      desc[1] = "value #{params[1]}" + (mode[1] == "0" ? " from %03d" % program[ic + 2] : "")
-
-      # puts "%03d: %s,%d,%d,%d - store result %b of %s < %s in %03d" % [ic, field, program[ic + 1], program[ic + 2], program[ic + 3], result, desc[0], desc[1], params[2]]
-      
-      program[params[2]] = result
+      program[params[2]] = params[0] < params[1] ? 1 : 0
       ic += 4
       
     when "08"
       params[0] = mode[0] == "0" ? program[program[ic + 1]] : program[ic + 1]
       params[1] = mode[1] == "0" ? program[program[ic + 2]] : program[ic + 2]
       params[2] = program[ic + 3]
-      result = params[0] == params[1] ? 1 : 0
-      
-      desc[0] = "value #{params[0]}" + (mode[0] == "0" ? " from %03d" % program[ic + 1] : "")
-      desc[1] = "value #{params[1]}" + (mode[1] == "0" ? " from %03d" % program[ic + 2] : "")
-
-      # puts "%03d: %s,%d,%d,%d - store result %b of %s == %s in %03d" % [ic, field, program[ic + 1], program[ic + 2], program[ic + 3], result, desc[0], desc[1], params[2]]
-      
-      program[params[2]] = result
+      program[params[2]] = params[0] == params[1] ? 1 : 0
       ic += 4
       
     end  
@@ -137,7 +88,7 @@ def run_series(program, settings)
   i
 end
 
-# phase one
+puts ">>> phase one"
 
 p1 = [3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0]
 s1 = [4,3,2,1,0]
@@ -158,8 +109,10 @@ p = [3,8,1001,8,10,8,105,1,0,0,21,46,55,76,89,106,187,268,349,430,99999,3,9,101,
 
 puts [*0..4].permutation(5).map{ |s| run_series(p,s) }.max
 
-# phase two
+puts ">>> phase two"
 
 p1 = [3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5]
 s1 = [9,8,7,6,5]
 
+o = s1.permutation(5).map{ |s| run_series p1, s }
+puts o.inspect
