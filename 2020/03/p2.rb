@@ -1,11 +1,13 @@
-input = File.readlines(ARGV[0])
+#!/usr/bin/ruby -w
+
+input = File.readlines(ARGV[0] || "input.txt")
 
 def run(dx, dy, forest)
   h, w = forest.length, forest[0].length - 1 # because of the new line
   x, y, trees = 0, 0, 0
 
   while y < h
-    x1, x2 = x.divmod(w)
+    _, x2 = x.divmod(w)
     trees += 1 if forest[y][x2] == "#"
     x += dx
     y += dy

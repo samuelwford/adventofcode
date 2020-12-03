@@ -1,8 +1,12 @@
+#!/usr/bin/ruby -w
+
+input = File.readlines(ARGV[0] || "input.txt")
+
 good = 0
 total = 0
 
-File.readlines(ARGV[0]).each do |line|
-  m = line.match /(?<p1>\d{1,2})-(?<p2>\d{1,2})\s(?<char>.)\:\s(?<pwd>.*)/
+input.each do |line|
+  m = line.match(/(?<p1>\d{1,2})-(?<p2>\d{1,2})\s(?<char>.)\:\s(?<pwd>.*)/)
   
   pwd = m[:pwd]
   char = m[:char]
