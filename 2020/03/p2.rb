@@ -1,6 +1,6 @@
 #!/usr/bin/ruby -w
 
-input = File.readlines(ARGV[0] || "input.txt")
+input = File.readlines(ARGV[0] || File.join(File.dirname(__FILE__), "input.txt"))
 
 def run(dx, dy, forest)
   h, w = forest.length, forest[0].length - 1 # because of the new line

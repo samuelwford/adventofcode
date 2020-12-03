@@ -1,6 +1,6 @@
 #!/usr/bin/ruby -w
 
-numbers = File.readlines(ARGV[0] || "input.txt")
+numbers = File.readlines(ARGV[0] || File.join(File.dirname(__FILE__), "input.txt"))
 
 i = 0
 while i < numbers.length - 2

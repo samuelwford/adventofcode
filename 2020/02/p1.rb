@@ -1,6 +1,6 @@
 #!/usr/bin/ruby -w
 
-input = File.readlines(ARGV[0] || "input.txt")
+input = File.readlines(ARGV[0] || File.join(File.dirname(__FILE__), "input.txt"))
 
 good = 0
 total = 0
