@@ -15,7 +15,8 @@ def parse(line)
 end
 
 def find_bags_to_hold(bag, rules)
-  applicable = rules.select { |rule| rule[:bags].any? { |b| b[:color] == bag } }.map { |rule| rule[:color] }
+  applicable = rules.select { |rule| rule[:bags].any? { |b| b[:color] == bag } }
+                    .map { |rule| rule[:color] }
   applicable |= applicable.flat_map { |bag| find_bags_to_hold(bag, rules) }
   
   applicable

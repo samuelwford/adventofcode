@@ -18,13 +18,10 @@ def parse(line)
 end
 
 def find_bags_in(bag, rules, l)
-  rule = rules.select { |r| r[:color] == bag }.first
-  bags = rule[:bags]
-  
-  return 1 if bags.length == 0
-  
-  count = bags.map { |b| b[:count] * find_bags_in(b[:color], rules, l + 1) }
-  count.sum + 1
+  rules.select { |r| r[:color] == bag }
+       .first[:bags]
+       .map { |b| b[:count] * find_bags_in(b[:color], rules, l + 1) }
+       .sum + 1
 end
 
 rules = input.map {|line| parse(line) }
