@@ -14,7 +14,6 @@ class CPU
   
   def acc(i)
     @a += i
-    #puts "  add #{i} to acc = #{@a}"
     @pc += 1    
   end
   
@@ -29,7 +28,6 @@ class CPU
   def run
     while @pc < @ram.length
       i, arg = @ram[@pc].split(" ")
-      #puts "#{pc}: #{i} @{arg}"
       @ram[@pc] = "stop"
       case i
       when "jmp"

@@ -8,7 +8,9 @@ def parse(line)
   bags = contains.split(", ")
   
   container.delete_suffix!(" bags")
-  bags = bags.map {|x| x.delete_suffix("s").delete_suffix(" bag").split(" ", 2) }
+  bags = bags.map {|x| x.delete_suffix("s")
+             .delete_suffix(" bag")
+             .split(" ", 2) }
   bags = bags.map {|x| { color: x[1], count: x[0].to_i } }
   
   { color: container, bags: bags }
