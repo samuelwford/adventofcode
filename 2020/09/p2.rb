@@ -13,7 +13,8 @@ while !found && stride < input.length
     chunk = input[i, stride]
     if chunk.sum == code
       found = true
-      puts "found: #{chunk} - #{chunk.min + chunk.max}"
+      puts "found: #{chunk}"
+      puts "min = #{chunk.min}, max = #{chunk.max}, min + max = #{chunk.min + chunk.max}"
       break
     end
     i += 1
