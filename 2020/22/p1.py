@@ -1,4 +1,4 @@
-from collections import deque
+#!/usr/bin/env python3
 
 input = open('input.txt').read()
 d1, d2 = input.split('\n\n')
@@ -14,12 +14,12 @@ while len(d1) > 0 and len(d2) > 0:
     print("Player 1 plays:", c1)
     print("Player 2 plays:", c2)
     if c1 > c2:
-        d1.append(max(c1,c2))
-        d1.append(min(c1,c2))
+        d1.append(c1)
+        d1.append(c2)
         print("Player 1 wins the round!")
     else:
-        d2.append(max(c1,c2))
-        d2.append(min(c1,c2))
+        d2.append(c2)
+        d2.append(c1)
         print("Player 2 wins the round!")
     print()
 
