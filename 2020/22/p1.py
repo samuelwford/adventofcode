@@ -1,6 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+import os
 
-input = open('input.txt').read()
+fname = os.path.join(os.path.dirname(__file__), 'input.txt')
+input = open(fname).read()
 d1, d2 = input.split('\n\n')
 d1, d2 = [int(i) for i in d1.splitlines()[1:]], [int(i) for i in d2.splitlines()[1:]]
 
