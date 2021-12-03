@@ -10,17 +10,11 @@ for line in lines:
         if line[i] == '1':
             counts[i] += 1
 
-gamma_counts   = [1 if count / len(lines) >= 0.5 else 0 for count in counts]
-epsilon_counts = [1 if count / len(lines) < 0.5 else 0 for count in counts]
+gamma_counts   = ['1' if count / len(lines) >= 0.5 else '0' for count in counts]
+epsilon_counts = ['1' if count / len(lines) < 0.5 else '0' for count in counts]
 
-bits = [2**i for i in range(len(counts))]
-bits = bits[::-1]
-
-gamma_bits = [a * b for (a, b) in zip(gamma_counts, bits)]
-gamma      = sum(gamma_bits)
-
-epsilon_bits = [a * b for (a, b) in zip(epsilon_counts, bits)]
-epsilon      = sum(epsilon_bits)
+gamma   = int(''.join(gamma_counts), 2)
+epsilon = int(''.join(epsilon_counts), 2)
 
 power_consumption = gamma * epsilon
 
@@ -39,28 +33,19 @@ def least_common(digit, values):
     else:
         return '0'
 
-o2_str = ''
-o2 = 0
-ratings = lines
-for i in range(len(counts)):
-    d = most_common(i, ratings)
-    ratings = list(filter(lambda r: r[i] == d, ratings))
-    if len(ratings) == 1:
-        o2_str = ratings[0]
-        o2 = int(o2_str, 2)
-        break
-
-co2_str = ''
-co2 = 0
-ratings = lines
-for i in range(len(counts)):
-    d = least_common(i, ratings)
-    ratings = list(filter(lambda r: r[i] == d, ratings))
-    if len(ratings) == 1:
-        co2_str = ratings[0]
-        co2 = int(co2_str, 2)
-        break
-
+def find_rating(common_f):
+    r = 0
+    ratings = lines
+    for i in range(len(counts)):
+        d = common_f(i, ratings)
+        ratings = list(filter(lambda r: r[i] == d, ratings))
+        if len(ratings) == 1:
+            r = int(ratings[0], 2)
+            break
+    return r
+    
+o2  = find_rating(most_common)
+co2 = find_rating(least_common)
 life_support_rating = o2 * co2
 
-print('part 2 -', 'o2:', o2_str, o2, 'co2:', co2_str, co2, 'life_support_rating:', life_support_rating)
+print('part 2 -', 'o2:', o2, 'co2:', co2, 'life_support_rating:', life_support_rating)
