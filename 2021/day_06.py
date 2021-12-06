@@ -10,12 +10,11 @@ for f in fish:
     gens[f] += 1
     
 def cycle(gens):
-    gen0 = gens[0]
-    gen6 = gen0
+    next_gen = gens[0]
     for i in range(8):
         gens[i] = gens[i + 1]
-    gens[8] = gen0
-    gens[6] += gen6
+    gens[8] = next_gen
+    gens[6] += next_gen
     return gens
 
 for day in range(80):
