@@ -7,4 +7,4 @@ def input_filename(filename):
     
 def read_input(filename):
     with open(input_filename(filename), 'r') as input_file:
-        return input_file.readlines()
+        return [line.rstrip() for line in input_file.readlines()]
