@@ -79,6 +79,7 @@ for row in basins:
                 basin_sizes[val] += 1
             else:
                 basin_sizes[val] = 1
+
 top_three = sorted(basin_sizes.values())[-3:]
 
 from functools import reduce
