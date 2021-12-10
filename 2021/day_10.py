@@ -25,9 +25,7 @@ for line in lines:
     if not ok:
         counts[c] += 1
 
-total = 0
-for s in counts:
-    total += counts[s] * points[s]
+total = sum(counts[s] * points[s] for s in counts)
 
 print('part 1 - total', total)
 
