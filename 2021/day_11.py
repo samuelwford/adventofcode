@@ -30,19 +30,6 @@ input = [
 
 octo = [[int(c) for c in r] for r in input]
 
-def pretty_print(l, g):
-    print("---[%s]---" % l)
-    for r in g:
-        print(''.join(str(i) if i < 10 else '*' for i in r))
-
-def pretty_print2(l, g, f):
-    q = {True: '*', False: '-'}
-    print("---[%s]---" % l)
-    for r in range(len(g)):
-        s1 = ''.join(str(i) if i < 10 else '*' for i in g[r])
-        s2 = ''.join('*' if i else '-' for i in f[r])
-        print(s1, s2)
-
 def in_grid(g, x, y):
     return y > -1 and y < len(g) and x > -1 and x < len(g[y])
     
