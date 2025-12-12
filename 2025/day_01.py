@@ -19,54 +19,55 @@ def part1(state, turn):
     if dial == 0:
         rotations += 1
 
-    print(f"After turn {turn}, dial is at {dial} with {rotations} rotations")
     return (dial, rotations)
 
-def part2(state, turn):
-    dial, rotations = state
-    direction, distance = turn
+def part2(turns):
+    position = 50
+    count = 0
+
+    for direction, distance in turns:
+        if direction == 'L':
+            # Count how many times we cross 0 going left
+            for step in range(1, distance + 1):
+                new_pos = (position - step) % 100
+                if new_pos == 0:
+                    count += 1
+            position = (position - distance) % 100
+        else:  # 'R'
+            # Count how many times we cross 0 going right
+            for step in range(1, distance + 1):
+                new_pos = (position + step) % 100
+                if new_pos == 0:
+                    count += 1
+            position = (position + distance) % 100
     
-    print("\n-----")
-    print(f"Starting turn {turn} from dial {dial} with {rotations} rotations")
+    return count
 
-    if direction == 'L':
-        if dial == 0:
-            dial = 100 # Start from 100 if at 0 and turning left
-        dial -= distance
-        print(f"Turning left {distance} from {dial + distance} to {dial}")
-        while dial < 0:
-            dial = 100 + dial
-            rotations += 1 if dial != 0 else 0
-            print("Completed a rotation going left ending at ", dial)
-    else:
-        dial += distance
-        print(f"Turning right {distance} from {dial - distance} to {dial}")
-        while dial > 99:
-            dial -= 100
-            rotations += 1 if dial != 0 else 0
-            print("Completed a rotation going right ending at ", dial)
+def parse(lines):
+    return [(line[0], int(line[1:])) for line in lines]
 
-    if dial == 0:
-        print("Dial hit zero!")
-        rotations += 1
+test_input = """
+L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82
+"""
+turns = parse(test_input.strip().split('\n')) 
 
-    print(f"After turn {turn}, dial is at {dial} with {rotations} rotations")
-    readline = input("Press Enter to continue...")
+result = reduce(part1, turns, (50, 0))
+assert result == (32, 3), 'expected (32, 3), got {}'.format(result)
+result = part2(turns)
+assert result == 6, 'expected 6, got {}'.format(result)
 
-    return (dial, rotations)
+turns = parse(utils.read_input('day_01.txt'))
 
-turns = [(line[0], int(line[1:])) for line in utils.read_input('day_01.txt')]
-
-# x = part2((50, 0), ('L', 68))
-# x = part2(x, ('L', 30))
-# x = part2(x, ('R', 48))
-# x = part2(x, ('L', 5))
-# x = part2(x, ('R', 60))
-# x = part2(x, ('L', 55))
-# x = part2(x, ('L', 1))
-# x = part2(x, ('L', 99))
-# x = part2(x, ('R', 14))
-# x = part2(x, ('L', 82))
-
-# reduce(part1, turns, (50, 0))
-reduce(part2, turns, (50, 0))
+result = reduce(part1, turns, (50, 0))
+print(f"Part 1 - Final dial position: {result[0]}, Total rotations: {result[1]}")
+result = part2(turns)
+print(f"Part 2 - Total rotations: {result}")
