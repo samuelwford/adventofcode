@@ -1,0 +1,11 @@
+{
+  "clips" : [
+    {
+      "content" : "import os\nimport utils\n\nclass Today(utils.Day):\n\tdef __init__(self):\n\t\tday = os.path.splitext(os.path.basename(__file__))[0]\n\t\tsuper().__init__(day)\n\t\t\n\tdef parse(self, data):\n\t\treturn data\n\t\t\n\tdef part1_answer(self, data):\n\t\treturn 0\n\t\t\n\tdef part2_answer(self, data):\n\t\treturn 0",
+      "name" : "New Day",
+      "scope" : "editor",
+      "shortcut" : "cmd-alt-ctrl-n",
+      "syntax" : "python"
+    }
+  ]
+}
